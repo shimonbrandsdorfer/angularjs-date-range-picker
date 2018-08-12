@@ -1,0 +1,23 @@
+{
+  "name": "angularjs-date-range-picker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "angularjs-date-range-picker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shimonbrandsdorfer/angularjs-date-range-picker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shimonbrandsdorfer/angularjs-date-range-picker/issues"
+  },
+  "homepage": "https://github.com/shimonbrandsdorfer/angularjs-date-range-picker#readme",
+  "dependencies": {
+    "angular": "^1.7.3",
+    "moment": "^2.22.2"
+  }
+}

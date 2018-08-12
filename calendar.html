@@ -1,0 +1,7 @@
+<div>
+  <div ng-repeat="week in weeks track by $index">
+    <div ng-repeat="day in week.days track by $index" ng-click="day.onClick(day)" ng-hover="day.onHover(day)">
+      {{day.displayAs}}
+    </div>
+  </div>
+</div>
