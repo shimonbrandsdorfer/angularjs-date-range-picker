@@ -1,6 +1,15 @@
 <div>
   <div ng-repeat="week in calendar.weeks track by $index">
-    <div ng-repeat="day in week.days track by $index" ng-click="day.onClick(day)" ng-hover="day.onHover(day)">
+    <div
+      ng-repeat="day in week.days track by $index"
+      ng-click="day.onClick(day)"
+      ng-hover="day.onHover(day)"
+      ng-class="{
+        'active' : day.active,
+        'in-range' : startDate < day.date && endDate > day.date,
+        'disabled' : day.disabled
+      }"
+      >
       {{day.displayAs}}
     </div>
   </div>
