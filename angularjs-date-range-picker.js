@@ -23,7 +23,8 @@
       var defaultConfig = {
         currentDate: new Date(),
         isDisabled: isDisabled,
-        onClickDate: defDateClicked,
+        onClickDate: angular.noop,
+        onHoverDate : angular.noop,
         dayFormat: 'DD'
       };
 
@@ -58,8 +59,8 @@
           var day = {
             day: j,
             date: Number(_date),
-            onClick: dayClickedFn(options, scope),
-            onHover: dayHovered
+            onClick: dayClickedFn(scope, options),
+            onHover: dayHoveredFn(scope, options)
           };
 
           day.isDisabled = options.isDisabled(day);
@@ -76,31 +77,55 @@
 
     }
 
-    function dayClickedFn(options, scope) {
+    function dayClickedFn(scope, options) {
       return function (day) {
-        var isDisabled = day.isDisabled;
-
-        if (isDisabled.disableSelectDate) return;
-
-        var daySettings = options.onClickDate(day);
-
-        selectDateRange(scope, day.date, isDisabled);
+        selectDateRange(scope, day);
+        options.onClickDate(day);
       }
     }
 
-    function dayHovered() {
-
+    function dayHoveredFn(scope, options) {
+      return function (day) {
+        dayHovered(scope, day);
+        options.onHoverDate(day);
+      }
     }
 
 
     /**
      * 
-     * @param {Number} date 
+     * @param {Object} day
      * @param {Object} isDisabled 
      */
-    function selectDateRange(scope, date, isDisabled) {
-      if(!scope.startDate) scope.startDate = date;
-      else scope.endDate = date;
+    function selectDateRange(scope, day, isDisabled) {
+      if(!scope.startDate) doStartDate(scope._$startDate, day);
+      else scope.endDate = doEndDate(scope._$endDate, day);
+    }
+
+    function doStartDate(current, prev){
+      if(prev){
+        prev.active = false;
+        prev.start = false;
+      }
+      scope._$startDate = current;
+      scope.startDate = current.date;
+      current.active = true;
+      current.start = true;
+    }
+
+    function doEndDate(current, prev){
+      if(prev){
+        prev.active = false;
+        prev.end = false;
+      }
+      scope._$endDate = current;
+      scope.endDate = current.date;
+      current.active = true;
+      current.end = true;
+    }
+
+    function dayHovered(day, scope){
+      scope.dateHovering = day.date;
     }
 
     //default function for when date was clicked
@@ -110,10 +135,6 @@
         disableSelectStart: false,
         disableSelectEnd: false
       };
-    }
-
-    function defDateClicked(day) {
-
     }
 
     return {
