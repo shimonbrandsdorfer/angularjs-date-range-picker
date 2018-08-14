@@ -5,13 +5,25 @@
 
   var tpl = `
   <link rel="stylesheet" href="../styles.css">
-  <div class="datepicker_wrpr">
-    <div class="week_wrpr" ng-repeat="week in calendar.weeks track by $index">
-      <div class="day_wrpr" ng-repeat="day in week.days track by $index" ng-click="day.onClick(day)" ng-hover="day.onHover(day)">
-        {{day.displayAs}}
-      </div>
+  <div  class="datepicker_wrpr">
+  <div class="week_wrpr"  ng-repeat="week in calendar.weeks track by $index">
+    <div
+    class="day_wrpr" 
+      ng-repeat="day in week.days track by $index"
+      ng-click="day.onClick(day)"
+      ng-hover="day.onHover(day)"
+      ng-class="{
+        'active' : startDate == day.date || endDate == day.date,
+        'start' : startDate == day.date,
+        'in-range' : startDate < day.date && endDate > day.date,
+        'disabled' : day.disabled
+      }"
+      >
+      {{day.displayAs}}
     </div>
   </div>
+</div>
+
   `;
 
   dateRangePicker.directive('dateRangePicker', dateRangePickerDir);

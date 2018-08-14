@@ -34,14 +34,20 @@
     border-radius: 3px;
 } */
 
-.day_wrpr.start {
+.day_wrpr.start_date {
     background: rgba(2, 92, 136, 0.8);
     color: #fff;
     border-radius: 3px;
 }
 
-.day_wrpr.end {
+.day_wrpr.selected:nth-last-of-type(1) {
     background: rgba(2, 92, 136, 0.8);
+    color: #fff;
+    border-radius: 3px;
+}
+
+.day_wrpr.in_range {
+    background: rgb(172, 178, 180);
     color: #fff;
     border-radius: 3px;
 }
