@@ -99,23 +99,8 @@
      * @param {Object} isDisabled 
      */
     function selectDateRange(scope, date, isDisabled) {
-
-      switch (true) {
-        case (!scope.startDate || date < scope.startDate) && !isDisabled.disableSelectStart:
-        //  if (!options.isDisabled(scope.startDate).disableSelectEnd) scope.endDate = scope.startDate;
-          scope.startDate = date;
-          break;
-        case date == scope.startDate:
-          scope.startDate = null;
-          break;
-        case scope.startDate && date > scope.startDate && !isDisabled.disableSelectEnd:
-          scope.endDate = date;
-          break;
-        case date == scope.endDate:
-          scope.endDate = null;
-          break;
-
-      }
+      if(!scope.startDate) scope.startDate = date;
+      else scope.endDate = date;
     }
 
     //default function for when date was clicked
