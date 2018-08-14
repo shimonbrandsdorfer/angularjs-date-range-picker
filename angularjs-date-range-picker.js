@@ -3,13 +3,16 @@
   //make sure moment is installed and available
   if (!window.moment) console.error('dateRangePicker requires moment');
 
-  var tpl = `<div>
-  <div ng-repeat="week in calendar.weeks track by $index">
-    <div ng-repeat="day in week.days track by $index" ng-click="day.onClick(day)" ng-hover="day.onHover(day)">
-      {{day.displayAs}}
+  var tpl = `
+  <link rel="stylesheet" href="../styles.css">
+  <div class="datepicker_wrpr">
+    <div class="week_wrpr" ng-repeat="week in calendar.weeks track by $index">
+      <div class="day_wrpr" ng-repeat="day in week.days track by $index" ng-click="day.onClick(day)" ng-hover="day.onHover(day)">
+        {{day.displayAs}}
+      </div>
     </div>
   </div>
-</div>`;
+  `;
 
   dateRangePicker.directive('dateRangePicker', dateRangePickerDir);
 
