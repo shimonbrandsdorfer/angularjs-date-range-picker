@@ -2,7 +2,8 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>title</title>
+    <link rel="icon" href="favicon.png">
+    <title>Date picker</title>
   <link rel="stylesheet" href="" type="text/css">
   <script src="../node_modules/angular/angular.min.js"></script>
   <script src="../node_modules/moment/min/moment.min.js"></script>
@@ -10,9 +11,8 @@
   <script src="./demo.js"></script>
   </head>
   <body ng-app="datePicker">
-    <div date-range-picker start-date="startDate" end-date="endDate"></div>
+    <div class="adr-picker-wrpr"  date-range-picker ng-model="dates" start-date="startDate" end-date="endDate">
+    </div>
 
-
-    {{startDate | date}} - {{endDate | date }}
   </body>
 </html>

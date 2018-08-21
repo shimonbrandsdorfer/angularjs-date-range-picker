@@ -4,26 +4,49 @@
 
   var tpl = `
   <link rel="stylesheet" href="../styles.css">
-  <div  class="datepicker_wrpr" ng-mouseleave="calendarMouseLeft()">
-  <div class="week_wrpr"  ng-repeat="week in calendar.weeks track by $index">
-    <div
-    class="day_wrpr" 
-      ng-repeat="day in week.days track by $index"
-      ng-click="day.onClick(day)"
-      ng-mouseover="day.onHover(day)"
-      ng-class="{
-        'active' : day.date == startDate || day.date == endDate,
-        'start' : day.date == startDate,
-        'end' : day.date == endDate,
-        'in-range' : isInRange(day),
-        'in-selected-range' : day.date <= endDate && day.date >= startDate,
-        'disabled' : day.disabled,
-        'is-in-current-month' : day.isInCurrentMonth,
-        'is-not-in-current-month' : !day.isInCurrentMonth
-      }"
-      >
-      {{day.displayAs}}
+  <div class="opener_wrpr">
+    <input
+      ng-blur="updateStartInput(inputStartDate)"
+      ng-model="inputStartDate"
+      class="dp_inpt" 
+      ng-class="{'open': show}"
+      ng-focus="openDatePicker()"/>
+  
+    <input 
+      ng-model="inputEndDate"
+      class="dp_inpt" 
+      ng-class="{'open': show}" 
+      ng-value="endDate | date"  
+      ng-focus="openDatePicker()" />
+
+  </div>
+  
+  <div ng-show="show" class="datepicker_wrpr" ng-mouseleave="calendarMouseLeft()">
+    <div class="week_wrpr"  ng-repeat="week in calendar.weeks track by $index">
+      <div
+      class="day_wrpr" 
+        ng-repeat="day in week.days track by $index"
+        ng-click="day.onClick(day)"
+        ng-mouseover="day.onHover(day)"
+        ng-class="{
+          'active' : day.date == startDate || day.date == endDate,
+          'start' : day.date == startDate,
+          'end' : day.date == endDate,
+          'in-range' : isInRange(day),
+          'in-selected-range' : day.date <= endDate && day.date >= startDate,
+          'disabled' : day.disabled,
+          'is-in-current-month' : day.isInCurrentMonth,
+          'is-not-in-current-month' : !day.isInCurrentMonth
+        }"
+        >
+        {{day.displayAs}}
+      </div>
     </div>
+    <div class="ftr">
+    <p>{{startDate | date}}</p>
+
+    <p>{{endDate ? '-' : ''}}</p>
+    <p>{{endDate | date}}</p>
   </div>
 </div>
 
@@ -34,7 +57,7 @@
   dateRangePickerDir.$inject = ["$compile"];
 
   function dateRangePickerDir($compile) {
-    function link(scope, element, attrs) {
+    function link(scope, element, attrs, ngModelCtrl) {
       var config = attrs.dateRangePicker || {};
 
       var defaultConfig = {
@@ -42,7 +65,8 @@
         isDisabled: isDisabled,
         onClickDate: angular.noop,
         onHoverDate: angular.noop,
-        dayFormat: "DD"
+        dayFormat: "DD",
+        inputFormat : "MM d, YYYY"
       };
 
       var _config = angular.extend(defaultConfig, config);
@@ -61,6 +85,22 @@
       scope.calendarMouseLeft = function() {
         scope.dateHovering = null;
       };
+
+      scope.openDatePicker = function() {
+        scope.show = true;
+      };
+
+      scope.updateStartInput = function(val){
+        var date = moment(val);
+
+
+        if(date.isValid()) doStartDate(val = {date: Number(new Date(val))})
+        else scope.inputStartDate = formatDate(scope.startDate);
+      }
+
+      function formatDate(date){
+        return moment(date).format(_config.inputFormat);
+      }
 
       var calendar = {};
 
@@ -127,14 +167,14 @@
     function selectDateRange(scope, day, isDisabled) {
       if (!scope.startDate) doStartDate(day, scope);
       else if (!scope.endDate) {
-        if(day.date > scope.startDate) doEndDate(day, scope);
+        if (day.date > scope.startDate) doEndDate(day, scope);
         else {
           doEndDate(scope._$startDate, scope);
           doStartDate(day, scope);
         }
       } else {
-        if(day.date < scope.startDate) doStartDate(day, scope);
-        else if(day.date > scope.endDate) doEndDate(day, scope);
+        if (day.date < scope.startDate) doStartDate(day, scope);
+        else if (day.date > scope.endDate) doEndDate(day, scope);
         else {
           doEndDate(undefined, scope);
           doStartDate(day, scope);
@@ -143,6 +183,7 @@
     }
 
     function doStartDate(current, scope) {
+      console.log(current)
       scope._$startDate = current;
       scope.startDate = current && current.date;
     }
@@ -167,10 +208,12 @@
 
     return {
       restrict: "A",
+      require: "ngModel",
       link: link,
       scope: {
         startDate: "=",
-        endDate: "="
+        endDate: "=",
+        ngModel: "="
       }
     };
   }

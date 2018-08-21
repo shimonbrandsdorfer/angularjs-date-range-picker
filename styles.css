@@ -1,11 +1,114 @@
-*{
-    /* background: red; */
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.opener_wrpr {
+    display: flex;
+    width: 312px;
+    height: 40px;
+    position: relative;
+}
+
+.opener_wrpr:before {
+    content: "";
+    display: block;
+    height: 56%;
+    width: 1px;
+    background: #bdbdbd;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.dp_inpt {
+    height: 40px;
+    width: 50%;
+    padding: 0px 20px;
+    box-sizing: border-box;
+    border: 1px solid #BDBDBD;
+    border-radius: 22px;
+    outline: none;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.dp_inpt:nth-child(1) {
+    border-right-width: 0px;
+    border-radius: 22px 0px 0px 22px;
+}
+
+
+.dp_inpt:nth-last-child(1) {
+    border-left-width: 0px;
+    border-radius: 0px 22px 22px 0px;
+}
+
+
+.dp_inpt.open:nth-child(1) {
+    border-radius: 6px 0px 0px 6px;
+}
+
+
+.dp_inpt.open:nth-last-child(1) {
+    border-radius: 0px 6px 6px 0px;
+}
+
+
+.adr-picker-wrpr {
+    display: inline-block;
+    margin: 100px auto;
+    padding: 8px 12px;
+    border: 1px solid #EEEEEE;
 }
 
 .datepicker_wrpr {
-    width: auto;
-    width: fit-content;
-
+    
 }
 
 .week_wrpr {
@@ -17,9 +120,9 @@
 }
 
 .day_wrpr {
-    height: 38px;
+    height: 40px;
     width: 40px;
-    line-height: 38px;
+    line-height: 40px;
     text-align: center;
     cursor: pointer;
 }
@@ -36,22 +139,55 @@
 
 
 .day_wrpr.start {
-    background: rgba(2, 92, 136, 0.8);
+    background: rgb(2, 136, 209);
     color: #fff;
     border-radius: 50% 0px 0px 50%;
 }
 
 .day_wrpr.end {
-    background: rgba(2, 92, 136, 0.8);
+    background: #0288D1;
     color: #fff;
     border-radius: 0px 50% 50% 0px;
 }
+.day_wrpr.end.start {
+    border-radius: 50%;
+}
 
 .day_wrpr.in-range:not(.start):not(.end) {
-    background: rgb(239, 239, 239);
+    background: #f6f6f6;
 }
 
 .day_wrpr.in-selected-range:not(.start):not(.end) {
-    background: rgba(13, 48, 126, 0.089);
+    background: #f1f8fe;
+}
+
+.ftr {
+    display: flex;
+    height: 30px;
+    line-height: 30px;
+    font-family: segoe ui;
+    font-weight: bold;
+    font-size: 13px;
+    color: #757575;
+}
+
+.ftr p {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.ftr p:nth-child(1) {   
+    width: calc(50% - 9px);
+    text-align: right;
+}
+
+.ftr p:nth-child(2) {   
+    width: 18px;
+    text-align: center;
+}
+
+.ftr p:nth-last-child(1) {   
+    width: calc(50% - 9px);
+    text-align: left;
 }
 
