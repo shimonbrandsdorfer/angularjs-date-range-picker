@@ -1,4 +1,4 @@
-(function(dateRangePicker) {
+(function (dateRangePicker) {
   //make sure moment is installed and available
   if (!window.moment) console.error("dateRangePicker requires moment");
 
@@ -22,24 +22,26 @@
   </div>
   
   <div ng-show="show" class="datepicker_wrpr" ng-mouseleave="calendarMouseLeft()">
-    <div class="week_wrpr"  ng-repeat="week in calendar.weeks track by $index">
-      <div
-      class="day_wrpr" 
-        ng-repeat="day in week.days track by $index"
-        ng-click="day.onClick(day)"
-        ng-mouseover="day.onHover(day)"
-        ng-class="{
-          'active' : day.date == startDate || day.date == endDate,
-          'start' : day.date == startDate,
-          'end' : day.date == endDate,
-          'in-range' : isInRange(day),
-          'in-selected-range' : day.date <= endDate && day.date >= startDate,
-          'disabled' : day.disabled,
-          'is-in-current-month' : day.isInCurrentMonth,
-          'is-not-in-current-month' : !day.isInCurrentMonth
-        }"
-        >
-        {{day.displayAs}}
+    <div ng-repeat="calendar in calendars track by $index">
+      <div class="week_wrpr"  ng-repeat="week in calendar.weeks track by $index">
+        <div
+        class="day_wrpr" 
+          ng-repeat="day in week.days track by $index"
+          ng-click="day.onClick(day)"
+          ng-mouseover="day.onHover(day)"
+          ng-class="{
+            'active' : day.date == startDate || day.date == endDate,
+            'start' : day.date == startDate,
+            'end' : day.date == endDate,
+            'in-range' : isInRange(day),
+            'in-selected-range' : day.date <= endDate && day.date >= startDate,
+            'disabled' : day.disabled,
+            'is-in-current-month' : day.isInCurrentMonth,
+            'is-not-in-current-month' : !day.isInCurrentMonth
+          }"
+          >
+          {{day.displayAs}}
+        </div>
       </div>
     </div>
     <div class="ftr">
@@ -66,57 +68,61 @@
         onClickDate: angular.noop,
         onHoverDate: angular.noop,
         dayFormat: "DD",
-        inputFormat : "MM d, YYYY"
+        inputFormat: "MM d, YYYY",
+        numOfCalendars: 1
       };
 
       var _config = angular.extend(defaultConfig, config);
 
-      scope.calendar = Calendar(_config, scope);
+      scope.calendars = buildCalendars(_config, scope);
 
       var template = $compile(tpl)(scope);
       element.append(template);
-    }
 
-    function Calendar(options, scope) {
-      scope.isInRange = function(day) {
+      scope.isInRange = function (day) {
         return day.date <= scope.dateHovering && day.date >= scope.startDate;
       };
 
-      scope.calendarMouseLeft = function() {
+      scope.calendarMouseLeft = function () {
         scope.dateHovering = null;
       };
 
-      scope.openDatePicker = function() {
+      scope.openDatePicker = function () {
         scope.show = true;
       };
 
-      scope.updateStartInput = function(val){
+      scope.updateStartInput = function (val) {
         var date = moment(val);
 
 
-        if(date.isValid()) doStartDate(val = {date: Number(new Date(val))})
+        if (date.isValid()) doStartDate(val = {
+          date: Number(new Date(val))
+        })
         else scope.inputStartDate = formatDate(scope.startDate);
       }
 
-      function formatDate(date){
+      function formatDate(date) {
         return moment(date).format(_config.inputFormat);
       }
+    }
+
+    function Calendar(options, scope, dateOfMonth) {
 
       var calendar = {};
 
-      var startCalendar = moment(options.currentDate)
-          .startOf("M")
-          .startOf("w"),
-        endCalendar = moment(options.currentDate)
-          .endOf("M")
-          .endOf("w");
+      var startCalendar = moment(dateOfMonth)
+        .startOf("M")
+        .startOf("w"),
+        endCalendar = moment(dateOfMonth)
+        .endOf("M")
+        .endOf("w");
 
       calendar.numOfWeeks = endCalendar.diff(startCalendar, "w") + 1;
       calendar.weeks = [];
 
       var _date = moment(startCalendar);
 
-      for (var i = 0; i < calendar.numOfWeeks; i++) {
+      for (var i = 0; i < 6; i++) {
         var week = {
           index: i,
           days: []
@@ -133,7 +139,7 @@
           day.isDisabled = options.isDisabled(day);
           day.displayAs = moment(day.date).format(options.dayFormat);
           day.isInCurrentMonth =
-            moment(day.date).month() == moment(options.currentDate).month();
+            moment(day.date).month() == moment(dateOfMonth).month();
 
           week.days.push(day);
           _date.add(1, "d");
@@ -143,17 +149,18 @@
       }
 
       return calendar;
+
     }
 
     function dayClickedFn(scope, options) {
-      return function(day) {
+      return function (day) {
         selectDateRange(scope, day);
         options.onClickDate(day);
       };
     }
 
     function dayHoveredFn(scope, options) {
-      return function(day) {
+      return function (day) {
         dayHovered(scope, day);
         options.onHoverDate(day);
       };
@@ -183,7 +190,6 @@
     }
 
     function doStartDate(current, scope) {
-      console.log(current)
       scope._$startDate = current;
       scope.startDate = current && current.date;
     }
@@ -204,6 +210,23 @@
         disableSelectStart: false,
         disableSelectEnd: false
       };
+    }
+
+    function buildCalendars(options, scope) {
+      var cals = [];
+      var numOfCalendars =  options.numOfCalendars + 2;
+      var dirNum = options.direction == 'backward' ? -1 : 1;
+
+      var _date = moment(options.currentDate).add(dirNum * -1, 'M');
+      for (let i = 0; i < numOfCalendars; i++) {
+        var calendar = Calendar(options, scope);
+        if(!i || i == (numOfCalendars-1)) calendar.visible = false;
+        else calendar.visible = true;
+        cals.push(calendar);
+
+       _date = moment(_date).add(dirNum, 'M');
+      }
+      return cals;
     }
 
     return {
