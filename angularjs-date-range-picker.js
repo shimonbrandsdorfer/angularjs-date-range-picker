@@ -91,6 +91,9 @@
         scope.show = true;
       };
 
+      scope.nextPrevious = nextPrevious(options, scope);
+
+
       scope.updateStartInput = function (val) {
         var date = moment(val);
 
@@ -109,7 +112,7 @@
     function Calendar(options, scope, dateOfMonth) {
 
       var calendar = {
-        dateOfMonth : dateOfMonth
+        dateOfMonth: dateOfMonth
       };
 
       var startCalendar = moment(dateOfMonth)
@@ -216,19 +219,37 @@
 
     function buildCalendars(options, scope) {
       var cals = [];
-      var numOfCalendars =  options.numOfCalendars + 2;
+      var numOfCalendars = options.numOfCalendars + 2;
       var dirNum = options.direction == 'backward' ? -1 : 1;
 
       var _date = moment(options.currentDate).add(dirNum * -1, 'M');
       for (let i = 0; i < numOfCalendars; i++) {
         var calendar = Calendar(options, scope, _date);
-        if(!i || i == (numOfCalendars-1)) calendar.visible = false;
+        if (!i || i == (numOfCalendars - 1)) calendar.visible = false;
         else calendar.visible = true;
         cals.push(calendar);
 
-       _date = moment(_date).add(dirNum, 'M');
+        _date = moment(_date).add(dirNum, 'M');
       }
       return cals;
+    }
+
+    function nextPrevious(options, scope) {
+      return function (dir) {
+        let _date = dir == 1 ?
+          scope.calendars[scope.calendars.length - 1].dateOfMonth :
+          scope.calendars[0].dateOfMonth;
+        let nDate = moment(_date).add(dir, 'M');
+        let newMonth = Calendar(options, scope, nDate)
+        if (dir = 1) {
+          scope.calendars.push(newMonth);
+          scope.calendars.shift()
+        } else {
+          scope.calendars.unshift(newMonth);
+          scope.calendars.pop();
+        }
+
+      }
     }
 
     return {
