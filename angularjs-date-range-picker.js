@@ -108,7 +108,9 @@
 
     function Calendar(options, scope, dateOfMonth) {
 
-      var calendar = {};
+      var calendar = {
+        dateOfMonth : dateOfMonth
+      };
 
       var startCalendar = moment(dateOfMonth)
         .startOf("M")
@@ -219,7 +221,7 @@
 
       var _date = moment(options.currentDate).add(dirNum * -1, 'M');
       for (let i = 0; i < numOfCalendars; i++) {
-        var calendar = Calendar(options, scope);
+        var calendar = Calendar(options, scope, _date);
         if(!i || i == (numOfCalendars-1)) calendar.visible = false;
         else calendar.visible = true;
         cals.push(calendar);
