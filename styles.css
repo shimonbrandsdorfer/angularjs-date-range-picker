@@ -47,6 +47,10 @@ table {
 	border-spacing: 0;
 }
 
+.df {
+    display: flex;
+}
+
 .opener_wrpr {
     display: flex;
     width: 312px;
@@ -109,6 +113,14 @@ table {
 
 .datepicker_wrpr {
     
+}
+
+.calendar_wrpr {
+    margin: 0px 5px;
+}
+
+.invisible {
+    opacity: 0.3;
 }
 
 .week_wrpr {

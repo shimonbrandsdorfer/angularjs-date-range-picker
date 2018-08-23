@@ -22,8 +22,9 @@
   </div>
   
   <div ng-show="show" class="datepicker_wrpr" ng-mouseleave="calendarMouseLeft()">
-    <div ng-repeat="calendar in calendars track by $index">
-      <div class="week_wrpr"  ng-repeat="week in calendar.weeks track by $index">
+    <div class="df">
+    <div class="calendar_wrpr" ng-class="{'invisible' : !calendar.visible}" ng-repeat="calendar in calendars track by $index">
+      <div class="week_wrpr" ng-repeat="week in calendar.weeks track by $index">
         <div
         class="day_wrpr" 
           ng-repeat="day in week.days track by $index"
@@ -43,6 +44,7 @@
           {{day.displayAs}}
         </div>
       </div>
+    </div>
     </div>
     <div class="ftr">
     <p>{{startDate | date}}</p>
@@ -69,7 +71,7 @@
         onHoverDate: angular.noop,
         dayFormat: "DD",
         inputFormat: "MM d, YYYY",
-        numOfCalendars: 1
+        numOfCalendars: 2
       };
 
       var _config = angular.extend(defaultConfig, config);
