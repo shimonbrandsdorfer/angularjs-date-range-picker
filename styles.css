@@ -112,15 +112,83 @@ table {
 }
 
 .datepicker_wrpr {
+    overflow: hidden;
     
 }
 
 .calendar_wrpr {
     margin: 0px 5px;
+    width: 280px;
+}
+
+.calendar_wrpr.invisible:nth-child(1) {
+    margin-left: -285px;
+    transition: all 2s;
+}
+
+.calendar_wrpr.invisible:nth-last-child(1) {
+    margin-right: -285px;
 }
 
 .invisible {
     opacity: 0.3;
+}
+
+.cal_mnth_hdr {
+    height: 38px;
+    line-height: 38px;
+    position: relative;
+    padding: 0px 36px;
+    margin-bottom: 3px;
+}
+
+.cal_mnth_hdr .np_btn {
+    position: absolute;
+    width: 36px;
+    top: 0px;
+    height: 100%;
+    border-radius: 3px;
+    transition: all 0.1s;
+}
+
+.cal_mnth_hdr .np_btn:hover {
+    background: #f7f7f7;
+    color: #545454;
+}
+
+.cal_mnth_hdr .np_btn:hover:after {
+    border-color:transparent transparent #545454 #545454;
+}
+
+.hdr_mnth {
+    width: 100%;
+    text-align: center;
+    font-family: "segoe ui";
+    font-size: 15px;
+    color: #8c8c8c;
+}
+
+.cal_mnth_hdr .np_btn:after {
+    content: "";
+    display: block;
+    height: 16px;
+    width: 16px;
+    border: 1px solid transparent;
+    border-color: transparent transparent #8c8c8c #8c8c8c;
+    transform: translate(0%, -50%) rotate(45deg);
+    top: 50%;
+    left: 14px;
+    position: relative;
+}
+
+.cal_mnth_hdr .np_btn.nxt {
+    margin-left: auto;
+    right: 0;
+    transform: rotate(180deg);
+}
+
+.cal_mnth_hdr .np_btn.prev {
+     left: 0px;
 }
 
 .week_wrpr {

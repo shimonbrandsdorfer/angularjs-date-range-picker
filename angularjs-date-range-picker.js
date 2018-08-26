@@ -6,9 +6,9 @@
   <link rel="stylesheet" href="../styles.css">
   <div class="opener_wrpr">
     <input
-      ng-blur="updateStartInput(inputStartDate)"
       ng-model="inputStartDate"
       class="dp_inpt" 
+      ng-value="endDate | date"  
       ng-class="{'open': show}"
       ng-focus="openDatePicker()"/>
   
@@ -21,9 +21,16 @@
 
   </div>
   
-  <div ng-show="show" class="datepicker_wrpr" ng-mouseleave="calendarMouseLeft()">
+  <!-- ng-show="show" -->
+  <div  class="datepicker_wrpr" ng-mouseleave="calendarMouseLeft()">
     <div class="df">
     <div class="calendar_wrpr" ng-class="{'invisible' : !calendar.visible}" ng-repeat="calendar in calendars track by $index">
+    <div class="df cal_mnth_hdr">
+      <div ng-if="$index == 1" class="np_btn prev" ng-click="nextPrevious(-1)"></div>
+      <p class="hdr_mnth">{{calendar.dateOfMonth | date : 'MMMM, yyyy'}}</p>
+      <div ng-if="$index == (calendars.length - 2)" class="np_btn nxt" ng-click="nextPrevious(1)"></div>
+    </div>
+    
       <div class="week_wrpr" ng-repeat="week in calendar.weeks track by $index">
         <div
         class="day_wrpr" 
@@ -93,17 +100,17 @@
         scope.show = true;
       };
 
-      scope.nextPrevious = nextPrevious(options, scope);
+      scope.nextPrevious = nextPrevious(_config, scope);
 
 
       scope.updateStartInput = function (val) {
-        var date = moment(val);
+        /*var date = moment(val);
 
 
         if (date.isValid()) doStartDate(val = {
           date: Number(new Date(val))
         })
-        else scope.inputStartDate = formatDate(scope.startDate);
+        else scope.inputStartDate = formatDate(scope.startDate);*/
       }
 
       function formatDate(date) {
@@ -114,7 +121,7 @@
     function Calendar(options, scope, dateOfMonth) {
 
       var calendar = {
-        dateOfMonth: dateOfMonth
+        dateOfMonth: Number(dateOfMonth)
       };
 
       var startCalendar = moment(dateOfMonth)
@@ -242,11 +249,16 @@
           scope.calendars[scope.calendars.length - 1].dateOfMonth :
           scope.calendars[0].dateOfMonth;
         let nDate = moment(_date).add(dir, 'M');
-        let newMonth = Calendar(options, scope, nDate)
+        let newMonth = Calendar(options, scope, nDate);
+          newMonth.visible = false;
         if (dir = 1) {
+          scope.calendars[scope.calendars.length - 1].visible = true;
+          scope.calendars[1].visible = false;
           scope.calendars.push(newMonth);
-          scope.calendars.shift()
+          scope.calendars.shift();
         } else {
+          scope.calendars[0].visible = true;
+          scope.calendars[scope.calendars.length - 2].visible = false;
           scope.calendars.unshift(newMonth);
           scope.calendars.pop();
         }
