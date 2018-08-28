@@ -234,13 +234,12 @@
       var _date = moment(options.currentDate).add(dirNum * -1, 'M');
       for (let i = 0; i < numOfCalendars; i++) {
         var calendar = Calendar(options, scope, _date);
-        if (!i || i == (numOfCalendars - 1)) calendar.visible = false;
-        else calendar.visible = true;
         cals.push(calendar);
 
         _date = moment(_date).add(dirNum, 'M');
       }
-      return cals;
+      
+      return showHideCals(cals);
     }
 
     function nextPrevious(options, scope) {
@@ -262,8 +261,16 @@
           scope.calendars.unshift(newMonth);
           scope.calendars.pop();
         }
-
+        showHideCals(scope.calendars);
       }
+    }
+
+    function showHideCals(cals) {
+      cals.forEach((c, i) => {        
+        if (!i || i == (cals.length - 1)) c.visible = false;
+        else c.visible = true;
+      })
+      return cals;
     }
 
     return {
